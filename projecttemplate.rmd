@@ -1,0 +1,778 @@
+---
+title: "Red Wines Quality Exploration"
+author: Aman Naidu
+date: April 26, 2018
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(GGally)
+library(gridExtra)
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+pf <- read.csv('wineQualityReds.csv')
+
+pf$X <- NULL #removing unnecessary column
+
+```
+
+This dataset explores the different chemical properties of red wine that affect its quality. 
+
+
+# Univariate Plots Section
+As shown below the dataset has 1599 rows and 12 columns. The following analysis also confirms that this dataset is relatively tidy.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, CHECK_DATA}
+nrow(pf)
+
+ncol(pf)
+
+head(pf)
+
+tail(pf)
+
+str(pf)
+```
+
+**Quality**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = quality)) + 
+  geom_bar()
+
+summary(pf$quality)
+
+```
+
+The data on quality appears to be normally distributed. Also note that Quality scores are discrete values between 3 and 8.
+
+**Fixed Acidity**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = fixed.acidity)) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = fixed.acidity)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$fixed.acidity),
+                             max(pf$fixed.acidity),
+                             length.out = 5)) 
+
+summary(pf$fixed.acidity)
+```
+
+Fixed Acidity values appear to be slightly skewed to the right.  Using a log scale normalises this data.
+
+**Volatile Acidity**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = volatile.acidity)) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = volatile.acidity)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$volatile.acidity),
+                             max(pf$volatile.acidity),
+                             length.out = 5)) 
+
+summary(pf$volatile.acidity)
+
+```
+
+Volatile Acidity values appear to be slightly skewed to the right.  Using a log scale normalises this data.
+
+**Citric Acid**
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = citric.acid)) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = citric.acid)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$citric.acid),
+                             max(pf$citric.acid),
+                             length.out = 5)) 
+
+summary(pf$citric.acid)
+
+```
+
+Citric Acid values appear to be skewed to the right.  Using a log scale normalises this data.  However there are some issues using this log_scale as the data is between 0 and 1.
+
+**Residual Sugar**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = residual.sugar)) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = residual.sugar)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$residual.sugar),
+                             max(pf$residual.sugar),
+                             length.out = 5)) 
+
+summary(pf$residual.sugar)
+
+```
+
+Residual Sugar values appear to be skewed to the right.  Using a log scale does not normalise the data.  This suggests that there are some really extreme values for residual sugar.
+
+**Chlorides**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = chlorides)) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = chlorides)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$chlorides),
+                             max(pf$chlorides),
+                             length.out = 5)) 
+
+summary(pf$chlorides)
+```
+
+Chloride values appear to be skewed to the right.  Using a log scale normalises the data. 
+
+**Free Sulfur Dioxide**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = free.sulfur.dioxide )) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = free.sulfur.dioxide)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$free.sulfur.dioxide),
+                             max(pf$free.sulfur.dioxide),
+                             length.out = 5)) 
+
+summary(pf$free.sulfur.dioxide)
+
+```
+
+Free Sulfur Dioxide values appear to be skewed to the right.  Using a log scale somewhat normalises this data. It appears that the log scale is a summation of two normal distributions.
+
+
+**Total Sulfur Dioxide**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = total.sulfur.dioxide )) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = total.sulfur.dioxide)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$total.sulfur.dioxide),
+                             max(pf$total.sulfur.dioxide),
+                             length.out = 5)) 
+
+summary(pf$total.sulfur.dioxide)
+
+
+```
+
+Total Sulfur Dioxide values appear to be skewed to the right.  Using a log scale somewhat normalises this data.
+
+
+**Density**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = density )) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = density )) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$density),
+                             max(pf$density),
+                             length.out = 5)) 
+
+summary(pf$total.sulfur.dioxide)
+
+```
+
+Density values appear to normal.
+
+**pH**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = pH )) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = pH)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$pH),
+                             max(pf$pH),
+                             length.out = 5)) 
+
+summary(pf$pH)
+
+```
+
+pH values appear to be normal and it seems no tranformation is required.
+
+
+**Sulphates**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = sulphates )) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = sulphates)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$sulphates),
+                             max(pf$sulphates),
+                             length.out = 5)) 
+
+summary(pf$sulphates)
+
+```
+
+Sulphates values appear to be skewed to the right.  Using a log scale normalises this data.
+
+
+**Alcohol**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = alcohol )) + 
+  geom_histogram()
+
+ggplot(data = pf, aes(x = alcohol)) + 
+  geom_histogram() + 
+  scale_x_log10(breaks = seq(min(pf$alcohol),
+                             max(pf$alcohol),
+                             length.out = 5)) 
+
+summary(pf$alcohol)
+
+```
+
+Alcohol values appear to be skewed to the right.  Using a log scale does not normalise the data.
+
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+
+There are 1599 varieties of red wine in the dataset with 12 features (fixed.acidity, volatile.acidity, citric.acid, residual.sugar, chlorides,       free.sulfur.dioxide, total.sulfur.dioxide, density, pH, sulphates,             alcohol and quality). All the variables in this dataset are numerical. The exception to this is the quality variable which is an integer score that can also be used as an ordered factor variable.
+
+Other observations:
+
+The median quality score is is 6.
+
+Quality Score only range between 3 and 8 
+
+A lot of the obervations are measurements that are greater than 0. This combined with the fact that the dataset is relatively small has caused a lot of the datasets to be skewed to the right.  Therefore there isn't enough justification to use a log scale.
+
+### What is/are the main feature(s) of interest in your dataset?
+
+The main feature of this dataset is the quality scores of the wines. I would like to determine which combination of chemical properties can be attributed towards these quality scores. 
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+
+I believe the main features affecting this should be the acidity level, the density and the alcohol content. Other factors may also be of influence.  For example the level of fixed acidity and volatile acidity may also affect the ph and therefore have an impact. Similarly residual sugar may have an impact on alcohol content which in turn may affect the quality.  Since the quality score is an arbitrary rating given by a judge it is hard to say which features are the most important at this stage of the analysis.
+
+### Did you create any new variables from existing variables in the dataset?
+
+No.  I modify variables later once I am able to determine the important variables affecting the quality score (after completing bivariate analysis).
+
+### Of the features you investigated, were there any unusual distributions? \
+
+No. I perform changes later once I am able to determine the important variables affecting the quality score (after completing bivariate analysis).
+
+# Bivariate Plots Section
+
+**Bivariate Correlation Analysis**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggpairs(pf[,c("fixed.acidity",
+              "volatile.acidity",
+              "citric.acid",   
+              "residual.sugar", 
+              "chlorides",  
+              "free.sulfur.dioxide",
+              "total.sulfur.dioxide",
+              "quality"
+              )])
+
+
+ggpairs(pf[,c("fixed.acidity",
+              "volatile.acidity",
+              "citric.acid",   
+              "density", 
+              "pH",  
+              "sulphates",
+              "alcohol" ,
+              "quality"
+              )])
+
+
+ggpairs(pf[,c("residual.sugar",
+              "chlorides",
+              "density", 
+              "pH",  
+              "sulphates",
+              "alcohol" ,
+              "quality"
+              )])
+```
+
+The analysis above was done to find any significant bivariate relationships. It tries to capture any linear relationships using a correlation coeffiecient. Coefficent close to 1 indicate a strong direct relationship between factors and coefficents close to -1 indicate a strong inverse relationship between factors.
+
+It seems that the quality score is affected by the following factors:
+
+a) Volatile Acidity (Correlation -0.391) 
+
+b) Citric acid (Correlation 0.226)
+
+c) Sulphates (Correlation 0.251)
+
+d) Alcohol (Correlation 0.476)
+
+Of these I think alcohol and volatile acidity are the most significant.
+
+
+The following other relationships were also observed:
+
+a) Volatile acidity and fixed acidity (Correlation -0.256)
+
+b) Fixed acidity and citric acid (Correlation 0.672)
+
+c) Volatile acidity and citric acid (Correlation -0.552)
+
+d) Density and fixed acidity (Correlation 0.668)
+
+e) Density and citric acid (Correlation 0.365)
+
+f) pH and fixed acidity (Correlation -0.683)
+
+g) pH and volatile acidity (Correlation 0.235)
+
+h) pH and citric acid (Correlation -0.542)
+
+i) pH and density (Correlation -0.342)
+
+j) sulphates and volatile acidity (Correlation -0.261)
+
+k) sulphates and citric acid (Correlation 0.313)
+
+l) alcohol and density (Correlation -0.496)
+
+m) alcohol and pH (Correlation 0.206)
+
+Of these I think the following relationships are the most important:
+
+a) fixed acidity and density
+b) fixed acidity and pH
+c) fixed acidity and citric acid
+
+**Quality vs Volatile Acidity**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(y = quality, x = volatile.acidity)) + 
+  geom_jitter( alpha = 1/3 ) + 
+  geom_smooth()
+```
+
+As shown above there appears to be a negative relationship between quality and volatile acidity.  However it does not seem that this relationship is linear.
+
+**Quality vs Citric Acid**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(y = quality, x = citric.acid)) + 
+  geom_jitter( alpha = 1/3 ) + 
+  geom_smooth()
+```
+
+It seems that the relationship between citric acid and quality is almost not existent. The downward trend at the end is skewed by an extreme value.
+
+**Quality vs Sulphates**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(y = quality, x = sulphates)) + 
+  geom_jitter( alpha = 1/3 ) + 
+  geom_smooth()
+
+```
+
+There does not seem to be any relationship between quality and sulphates.
+
+**Quality vs Alcohol**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(y = quality, x = alcohol)) + 
+  geom_jitter( alpha = 1/3 ) + 
+  geom_smooth()
+```
+
+Alcohol seems to improve quality up to a certain point (13% alcohol).  However as shown this relationship is not linear.
+
+**Fixed acidity vs Density**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = density, y = fixed.acidity)) + 
+  geom_point( alpha = 1/3 ) + 
+  geom_smooth()
+```
+
+There is some evidence of a linear relationship between density and fixed acidity.
+
+**Fixed acidity vs pH**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = pH, y = fixed.acidity)) + 
+  geom_point( alpha = 1/3 ) + 
+  geom_smooth()
+```
+
+There is some evidence of an inverse linear relationship between pH and fixed acidity.
+
+**Fixed acidity vs Citric Acid**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = citric.acid, y = fixed.acidity)) + 
+  geom_point( alpha = 1/3 ) + 
+  geom_smooth()
+```
+
+There is some evidence of a linear relationship between citric acid and fixed acidity. The downtrend at the end is misleading as it is the result of only one extreme value.
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+It seems that the quality score is affected by the following factors:
+
+a) Volatile Acidity (Correlation -0.391) 
+
+b) Citric acid (Correlation 0.226)
+
+c) Sulphates (Correlation 0.251)
+
+d) Alcohol (Correlation 0.476)
+
+Of these I think alcohol and volatile acidity are the most significant.
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+The following relationships were observed:
+
+a) Volatile acidity and fixed acidity (Correlation -0.256)
+
+b) Fixed acidity and citric acid (Correlation 0.672)
+
+c) Volatile acidity and citric acid (Correlation -0.552)
+
+d) Density and fixed acidity (Correlation 0.668)
+
+e) Density and citric acid (Correlation 0.365)
+
+f) pH and fixed acidity (Correlation -0.683)
+
+g) pH and volatile acidity (Correlation 0.235)
+
+h) pH and citric acid (Correlation -0.542)
+
+i) pH and density (Correlation -0.342)
+
+j) sulphates and volatile acidity (Correlation -0.261)
+
+k) sulphates and citric acid (Correlation 0.313)
+
+l) alcohol and density (Correlation -0.496)
+
+m) alcohol and pH (Correlation 0.206)
+
+Of these I think the following relationships are the most important:
+
+a) fixed acidity and density
+b) fixed acidity and pH
+c) fixed acidity and citric acid
+
+
+### What was the strongest relationship you found?
+
+A negative relationship between pH and fixed acidity (Correlation -0.683)
+
+# Multivariate Plots Section
+
+**Quality, volatile acidity and alcohol**
+
+Since alcohol and volatile acidity were the most signicant factors in affecting quality score, I decided to analyse this relationship further. In this case I decided to use the rainbow ROYGBIV (Red, Orange Yellow, Green, Blue, Indigo, Violet) colour scale for alcohol. This is because we know that the optimum score for quality does not occur at extremely high or low values of alcohol but rather values in between.  Using a ROYGBIV scale allows us to discern these level more easily than if we used a single sequential colour scale.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = volatile.acidity, y = quality, colour = alcohol)) +
+  geom_jitter( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7)) 
+
+```
+
+As shown in the plot and model above there is definately some evidence of a relationship between alcohol, volatile acidity and quality.  We can explore this relationship further by discretising alcohol and volatile acidity.
+
+**Quality, volatile acidity and alcohol - A discretised Analysis**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+pf$alcohol.level = ordered(round(pf$alcohol, digits = 0))
+pf$volatile.acidity.level = ordered(round(pf$volatile.acidity, digits = 1))
+
+ggplot(data = pf,
+       aes(x = volatile.acidity.level, 
+           y = quality,
+           colour = alcohol.level)) + 
+  geom_point() + 
+  geom_jitter( alpha = 1/3 )
+```
+
+The graph above discretises alcohol and volatile acidity so that we can better see what is happening.However as shown it can be hard to discern the colours when they overlap each other due to the jitter property. One way to overcome this problem is to use facets to separate these colours and see which one of them occurs the most in a given region.  The following plot shows how we can do this.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(data = pf, 
+       aes(x = alcohol, 
+           y = quality, 
+           colour = alcohol)) +
+  geom_jitter( alpha = 1/3  ) + 
+  scale_colour_gradientn(colours=rainbow(7)) + 
+  facet_grid(.~volatile.acidity.level) + 
+  theme(axis.text.x=element_blank(), 
+        axis.ticks.x=element_blank(), 
+        axis.title.x=element_blank())
+```
+
+As shown in the plot above, there is some evidence that both alcohol and volatile acidity affect quality scores.
+
+**Quality, volatile acidity and alcohol - Regression Models**
+
+Given the relationship shown above, I decided to model quality, volatile acidity and alcohol. I tested a number of models including some that included other variables and some that use logarithmic functions. However, I found that most models had similar r squared values to the simple model shown below.  I decided to choose this simple model, as simpler models tend to have higher predictive power than complex models.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+m1 <- lm(I(quality) ~ I( alcohol ) + I( volatile.acidity ), 
+         data = pf ) 
+m1
+summary(m1)
+
+```
+
+Based on previous analysis I decided to test a discretised version of this model. The results are shown below.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+m1 <- lm(I(quality) ~ I( alcohol.level ) + I( volatile.acidity.level ), 
+         data = pf ) 
+m1
+
+summary(m1)
+
+```
+
+As shown this model produces a slightly better r squared.  Intuitively this makes sense as there is likely to be small rounding errors in data measurement. Using rounded values is likely to overcome this problem.
+
+**Fixed Acidity, Density, pH & Citric Acid**
+
+My previous analysis indicates that there is a relationship between fixed acidity, density, pH and citric acid. I decided to explore this relationship further. As it is difficult to explore the relationship between 4 variables I decided to look at 3 variables at a time. First I explored the relatinship between fixed acidity, density and citric acid.  The results are shown in the plot below.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = density, y = fixed.acidity, colour = citric.acid)) +
+  geom_point( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7))
+```
+
+As shown fixed acidity increases when either density or citric acid values increase.
+
+Similarly, a relationship between fixed acidity, density and pH can be seen in the plot below.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = pf, aes(x = density, y = fixed.acidity, colour = pH)) +
+  geom_point( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7)) 
+```
+
+As shown fixed acidity increases when either density increases but decreases when pH increases.
+
+Having seen that all these 4 variables are related, I decided to combine them in one visualisation so that I could better understand their relationship. In this case I was able to achieve this by discretising values of citric acid.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(data = pf, aes(x = density, y = fixed.acidity, colour = pH)) +
+  geom_point( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7)) +
+  facet_grid(.~ordered(round(citric.acid,digits = 1))) + 
+  geom_smooth(colour = 'black', 
+              method = 'lm') +
+  theme(axis.text.x=element_blank(), 
+        axis.ticks.x=element_blank())
+
+```
+
+As shown in the graph above there is a clear relationship between citric acid, density, fixed acidity and pH levels. This is further confirmed in the regression model below.  
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+m1 <- lm(I(fixed.acidity) ~ I( citric.acid ) + I( density ) + I( pH ), 
+         data = pf ) 
+
+m1
+
+summary(m1)
+
+```
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+As shown in the visualisation above there may be an ideal range of alcohol and volatile acidity levels that maximises quality.  However this combination is not a simple linear relationship. It seems that the optimal alcohol level is between 13 and 14 and the optimum volatile acidity level is between 0.3 and 0.8. The low r squared term suggest that there are other elements that are missing in this investigation. 
+
+
+### Were there any interesting or surprising interactions between features?
+As shown in the graph above there is a clear relationship between citric acid, density, fixed acidity and pH levels.  From this relationship we can see that citric acid (or components that help make it) is an influential ingredient that affects density, fixed acidity and pH levels of red wine.
+
+### OPTIONAL: Did you create any models with your dataset? Discuss the \
+strengths and limitations of your model.
+
+The model that I finally decided to use involved quality as a function of discretised alcohol and volatile acidity levels. I decided to use this model because it was the only simple model and it had a reasonable r squared value (over 0.3).  While other factors did improve the r squared scored their impact was negligible.  As explained above this model is relatively limited.  Much of the variation in this model is left unexplained and it is likely that we are missing important information that could help us predict quality.
+
+------
+
+# Final Plots and Summary
+
+### Plot One
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(data = pf, aes(x = alcohol, y = quality, colour = alcohol)) +
+geom_jitter( alpha = 1/3 ) + 
+scale_colour_gradientn(colours=rainbow(7),
+                       name="Alcohol (%)") + 
+facet_grid(.~volatile.acidity.level) + 
+xlab('Alcohol (%) over Volatile Acidity Levels (g/dm^3)') + 
+ylab('Quality Scores') +
+ggtitle('Quality Scores vs Alcohol and Volatile Acidity') +
+theme(axis.title.x=element_text(colour = "DarkGreen", size=15),
+      axis.ticks.x=element_blank(), 
+      axis.text.x=element_blank(),
+      
+      axis.title.y=element_text(colour = "Red", size=15),
+      axis.text.y=element_text(size = 10),
+      
+      plot.title = element_text(colour = "DarkBlue", size = 20),
+      
+      legend.title = element_text(size = 15),
+      legend.text = element_text(size = 10)
+      )
+      
+```
+
+### Description One
+This plot summarises the relationship between quality scores, alcohol, and volatile acidity. I chose to use this plot as it clearly shows that there is an optimum range for alcohol and volatile acidity that maximises quality scores. As shown in the plot, this relationship is not purely linear and more information is required to predict the quality score more accurately.
+
+
+### Plot Two
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+p1 <- ggplot(data = pf, aes(x = density, y = fixed.acidity, colour = citric.acid)) + 
+  geom_point( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7),
+                         name="Citric Acid (g/dm^3)") + 
+  xlab('Density (g/cm^3)') + 
+  ylab('Fixed Acidity (g/dm^3)') +
+  ggtitle('Fixed acidity, Density & Citric Acid') +
+  theme(axis.title.x=element_text(colour = "DarkGreen", size=12),
+        axis.ticks.x=element_blank(), 
+        axis.text.x=element_blank(),
+        
+        axis.title.y=element_text(colour = "Red", size=12),
+        axis.text.y=element_text(size = 10),
+        
+        plot.title = element_text(colour = "DarkBlue", size = 12),
+        
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 5),
+        legend.position = c(0,1),
+        legend.justification = c(0,1)
+        
+  )
+
+p2 <- ggplot(data = pf, aes(x = density, y = fixed.acidity, colour = pH)) + 
+  geom_point( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7),
+                         name="pH") + 
+  xlab('Density (g/cm^3)') + 
+  ylab('Fixed Acidity (g/dm^3)') +
+  ggtitle('Fixed acidity, Density & pH') +
+  theme(axis.title.x=element_text(colour = "DarkGreen", size=12),
+        axis.ticks.x=element_blank(), 
+        axis.text.x=element_blank(),
+        
+        axis.title.y=element_text(colour = "Red", size=12),
+        axis.text.y=element_text(size = 10),
+        
+        plot.title = element_text(colour = "DarkBlue", size = 12),
+        
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 5),
+        legend.position = c(0,1),
+        legend.justification = c(0,1)
+        
+  )
+
+grid.arrange(p1,p2,ncol = 2)
+
+```
+
+### Description Two
+This plot shows the relationship between fixed acidity, density, citric acid and pH. It is important as it clearly shows that fixed acidity increases when either density increases or citric acid increases but decreases as pH increases.
+
+### Plot Three
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(data = pf, aes(x = density, y = fixed.acidity, colour = pH)) + 
+  geom_point( alpha = 1/3 ) + 
+  scale_colour_gradientn(colours=rainbow(7),
+                         name="pH") + 
+  facet_grid(.~ordered(round(citric.acid,digits = 1))) + 
+  geom_smooth(colour = 'black', method = 'lm') + 
+  xlab('Density (g/cm^3) over Fixed Citric Acid (g/dm^3)') + 
+  ylab('Fixed Acidity (g/dm^3)') +
+  ggtitle('Fixed acidity, Density, pH & Citric Acid Levels') +
+  theme(axis.title.x=element_text(colour = "DarkGreen", size=20),
+        axis.ticks.x=element_blank(), 
+        axis.text.x=element_blank(),
+        
+        axis.title.y=element_text(colour = "Red", size=20),
+        axis.text.y=element_text(size = 10),
+        
+        plot.title = element_text(colour = "DarkBlue", size = 20),
+        
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 5),
+        legend.position = c(0,1),
+        legend.justification = c(0,1)
+        
+  )
+
+```
+
+### Description Three
+This plot tries to combine the information shown in the two plots in plot 2 so that we can see the relationship between fixed acidity, density, PH and citric acid levels. It does this by discretising citric acid levels so that we can use facets that see how pH and density affect fixed acidity. We can also see how fixed acidity increases when we move to higher discretised levels of citric acid. 
+
+------
+
+# Reflection
+
+In this exploration the main objective was to explore the relationship between quality scores and the chemical properties of red wine.  Our initial analysis showed that we had a limited range of data which cause a lot of our data for individual measurements to be skewed to the right. Doing a bivariate analysis suggested that a relationship existed between quality scores, volatile acidity and alcohol.  Further analysis allowed us to plot this relationship and do a linear regression.  It seems that a simple or logarithmic regression is not sufficient. Further analysis using step functions seems to be required. More data and time is required to verify this.  There is some indication that a step-based relationship could be used as there are ideal ranges of alchohol and volatile acidity where quality scores are maximised. 
+
+In addition a relationship was also found between fixed acidity density, pH and citric acid.  This relationship had a much better r squared value when regression was performed and was confirmed by several plots. This suggests that citric acid (or some components of it) have a significant impact on density, pH and fixed acidity. 
